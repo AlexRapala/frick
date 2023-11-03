@@ -1,7 +1,7 @@
 import {getServerSession} from 'next-auth/next';
 import { options } from './api/auth/[...nextauth]/options';
 import Image from 'next/image'
-import {db } from "@/lib/turso";
+import { db } from "@/lib/turso";
 import { tasks, users } from '@/drizzle/schema';
 import { eq, isNull } from 'drizzle-orm';
 import { v4 as uuidv4 } from "uuid";
@@ -16,6 +16,6 @@ export default async function Home() {
   console.log(results);
 
   return (
-    <CreateTask />
+    <CreateTask insertTask={insertTask}/>
   )
 }

@@ -1,9 +1,10 @@
 "use client";
-import { insertTask } from '@/actions/actions';
-import { useSession } from 'next-auth/react';
 
-export default function CreateTask() {
-
+import { ResultSet } from "@libsql/client";
+type insertTaskFn = {
+    ({title}: {title: string}): Promise<ResultSet>
+}
+export default function CreateTask({insertTask}: {insertTask: insertTaskFn}) {
 
   return (
     <button onClick={() => insertTask({title: "From Button"})}>
