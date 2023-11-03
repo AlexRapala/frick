@@ -1,9 +1,8 @@
-import type { NextAuthOptions } from "next-auth";
+import type { NextAuthOptions, Session } from "next-auth";
 import GithubProvider from 'next-auth/providers/github';
 import { DrizzleAdapter } from "@/drizzle/adapter"
-import { accounts, db, sessions, users } from "@/lib/turso";
-import { Adapter } from "next-auth/adapters";
-import { and, eq } from "drizzle-orm";
+import { db } from '@/lib/turso';
+import { TokenSet } from "@auth/core/types";
 
 
 export const options: NextAuthOptions = {
@@ -18,12 +17,11 @@ export const options: NextAuthOptions = {
         strategy: 'jwt'
     },
     callbacks: {
-        session({ session, token}) {
-            
-            console.log('here');
-            console.log(session, token);
-    
+        session({session, token}: {session: Session, token: any}) {
+            if (session && token) {
+                session.user.id = token.sub;
+            }
             return session;
-        },
-      },
+        }
+    }
 }

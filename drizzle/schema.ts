@@ -1,13 +1,7 @@
 import { integer, sqliteTable, text, primaryKey } from "drizzle-orm/sqlite-core"
 import type { AdapterAccount } from "@auth/core/adapters"
+import { sql } from "drizzle-orm";
 
-export const tasks = sqliteTable("task", {
-    id: text("id").notNull().primaryKey(),
-    title: text("name"),
-    description: text("description"),
-    userId: text("userId").references(() => users.id, { onDelete: 'no action'}),
-
-});
 
 export const users = sqliteTable("user", {
   id: text("id").notNull().primaryKey(),
@@ -15,6 +9,14 @@ export const users = sqliteTable("user", {
   email: text("email").notNull(),
   emailVerified: integer("emailVerified", { mode: "timestamp_ms" }),
   image: text("image")
+});
+
+export const tasks = sqliteTable("task", {
+    id: text("id").notNull().primaryKey(),
+    title: text("title"),
+    description: text("description"),
+    userId: text("userId").references(() => users.id),
+    created: text("timestamp").default(sql`CURRENT_TIMESTAMP`),
 });
 
 export const accounts = sqliteTable(
