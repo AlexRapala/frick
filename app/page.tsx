@@ -1,21 +1,23 @@
-import {getServerSession} from 'next-auth/next';
-import { options } from './api/auth/[...nextauth]/options';
-import Image from 'next/image'
+import { getServerSession } from "next-auth/next";
+import { options } from "./api/auth/[...nextauth]/options";
 import { db } from "@/lib/turso";
-import { tasks, users } from '@/drizzle/schema';
-import { eq, isNull } from 'drizzle-orm';
-import { v4 as uuidv4 } from "uuid";
-import { insertTask } from '@/actions/actions';
-import CreateTask from '@/components/CreateTask';
+import { tasks, users } from "@/drizzle/schema";
+import { insertTask } from "@/actions/actions";
+import NewTask from "@/components/NewTask";
 
 export default async function Home() {
   const session = await getServerSession(options);
-  console.log(session);
 
+  /*
   const results = await db.select().from(tasks);
   console.log(results);
-
+*/
   return (
-    <CreateTask insertTask={insertTask}/>
-  )
+    <section className="py-24 px-24">
+      <div className="container">
+        <h1 className="mb-16 text-2xl font-medium">Tasks</h1>
+      </div>
+      <NewTask />
+    </section>
+  );
 }
