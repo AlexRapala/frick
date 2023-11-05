@@ -3,6 +3,8 @@
 import { CreateTask } from "@/types/types";
 import { useState } from "react";
 import { useForm, SubmitHandler } from "react-hook-form";
+import { Button } from "./ui/button";
+import { Input } from "./ui/input";
 
 export default function NewTask() {
   const [data, setData] = useState<CreateTask>();
@@ -35,7 +37,7 @@ export default function NewTask() {
         onSubmit={handleSubmit(processForm)}
         className="flex flex-1 flex-col gap-4 sm:w-1/2"
       >
-        <input
+        <Input
           placeholder="title"
           className="rounded-lg"
           {...register("title", { required: "Title is required" })}
@@ -44,7 +46,7 @@ export default function NewTask() {
           <p className="text-sm text-red-400">{errors.title.message}</p>
         )}
 
-        <input
+        <Input
           placeholder="description"
           className="rounded-lg"
           {...register("description", {
@@ -58,7 +60,7 @@ export default function NewTask() {
         {errors.description?.message && (
           <p className="text-sm text-red-400">{errors.description.message}</p>
         )}
-        <button className="rounded-lg bg-black py-2 text-white">Submit</button>
+        <Button>Submit</Button>
       </form>
       <div className="flex-1 rounded-lg bg-cyan-600 p-8 text-white">
         <pre>{JSON.stringify(data, null, 2)}</pre>
