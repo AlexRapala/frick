@@ -1,5 +1,5 @@
 import { getServerSession } from "next-auth/next";
-import { options } from "./api/auth/[...nextauth]/options";
+import { options } from "@/app/api/auth/[...nextauth]/options";
 import { db } from "@/lib/turso";
 import { tasks, users } from "@/drizzle/schema";
 import { insertTask } from "@/actions/actions";
@@ -18,7 +18,7 @@ export default async function Home() {
       <div className="container">
         <h1 className="mb-16 text-2xl font-medium">Tasks</h1>
       </div>
-      <h2>Dash</h2>
+      <NewTask />
     </section>
   );
 }

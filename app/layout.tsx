@@ -3,6 +3,8 @@ import { Inter as FontSans } from "next/font/google";
 import "./globals.css";
 import { cn } from "@/lib/utils";
 import { ThemeProvider } from "@/components/theme-provider";
+import { NavMenu } from "@/components/NavMenu";
+import { ModeToggle } from "@/components/DarkModeToggle";
 
 export const metadata: Metadata = {
   title: "Create Next App",
@@ -32,6 +34,11 @@ export default function RootLayout({
           enableSystem
           disableTransitionOnChange
         >
+          <div className="flex items-center justify-between px-4 py-4">
+            <NavMenu />
+            <ModeToggle />
+          </div>
+
           {children}
         </ThemeProvider>
       </body>
