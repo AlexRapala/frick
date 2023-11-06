@@ -5,6 +5,9 @@ import { cn } from "@/lib/utils";
 import { ThemeProvider } from "@/components/theme-provider";
 import { NavMenu } from "@/components/NavMenu";
 import { ModeToggle } from "@/components/DarkModeToggle";
+import { getServerSession } from "next-auth/next";
+import { options } from "@/app/api/auth/[...nextauth]/options";
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 
 export const metadata: Metadata = {
   title: "Create Next App",
@@ -15,11 +18,13 @@ export const fontSans = FontSans({
   subsets: ["latin"],
   variable: "--font-sans",
 });
-export default function RootLayout({
+export default async function RootLayout({
   children,
 }: {
   children: React.ReactNode;
 }) {
+  const session = await getServerSession(options);
+  console.log(session);
   return (
     <html lang="en">
       <body
@@ -36,7 +41,15 @@ export default function RootLayout({
         >
           <div className="flex items-center justify-between px-4 py-4">
             <NavMenu />
-            <ModeToggle />
+            <div className="flex direction-row gap-4">
+              <ModeToggle />
+              <Avatar>
+                <AvatarImage src={session?.user.image || ""} alt="@shadcn" />
+                <AvatarFallback>
+                  {session?.user.name?.[0] || "U"}
+                </AvatarFallback>
+              </Avatar>
+            </div>
           </div>
 
           {children}
