@@ -1,5 +1,9 @@
 import { and, eq } from "drizzle-orm";
-import type { Adapter, AdapterAccount, VerificationToken } from "next-auth/adapters";
+import type {
+  Adapter,
+  AdapterAccount,
+  VerificationToken,
+} from "next-auth/adapters";
 import { v4 as uuidv4 } from "uuid";
 import { db } from "../lib/turso";
 import { accounts, sessions, users, verificationTokens } from "./schema";
@@ -14,17 +18,28 @@ export function DrizzleAdapter(database: typeof db): Adapter {
         .get();
     },
     getUser: async (id) => {
-      return await database.select().from(users).where(eq(users.id, id)).get() ?? null;
+      return (
+        (await database.select().from(users).where(eq(users.id, id)).get()) ??
+        null
+      );
     },
     getUserByEmail: async (email) => {
-      return await database.select().from(users).where(eq(users.email, email)).get() ?? null;
+      return (
+        (await database
+          .select()
+          .from(users)
+          .where(eq(users.email, email))
+          .get()) ?? null
+      );
     },
     createSession: (session) => {
+      console.log(session);
       return database.insert(sessions).values(session).returning().get();
     },
     getSessionAndUser: async (sessionToken) => {
-      return (await 
-        database
+      console.log(sessionToken, "SESSION");
+      return (
+        (await database
           .select({
             session: sessions,
             user: users,
@@ -32,11 +47,16 @@ export function DrizzleAdapter(database: typeof db): Adapter {
           .from(sessions)
           .where(eq(sessions.sessionToken, sessionToken))
           .innerJoin(users, eq(users.id, sessions.userId))
-          .get() ?? null
+          .get()) ?? null
       );
     },
     updateUser: (user) => {
-      return database.update(users).set(user).where(eq(users.id, user.id)).returning().get();
+      return database
+        .update(users)
+        .set(user)
+        .where(eq(users.id, user.id))
+        .returning()
+        .get();
     },
     updateSession: (session) => {
       return database
@@ -47,7 +67,11 @@ export function DrizzleAdapter(database: typeof db): Adapter {
         .get();
     },
     linkAccount: async (rawAccount) => {
-      const updatedAccount = await database.insert(accounts).values(rawAccount).returning().get();
+      const updatedAccount = await database
+        .insert(accounts)
+        .values(rawAccount)
+        .returning()
+        .get();
 
       const account: AdapterAccount = {
         ...updatedAccount,
@@ -63,8 +87,8 @@ export function DrizzleAdapter(database: typeof db): Adapter {
       return account;
     },
     getUserByAccount: async (account) => {
-      return (await 
-        database
+      return (
+        (await database
           .select({
             id: users.id,
             email: users.email,
@@ -77,19 +101,27 @@ export function DrizzleAdapter(database: typeof db): Adapter {
             accounts,
             and(
               eq(accounts.providerAccountId, account.providerAccountId),
-              eq(accounts.provider, account.provider),
-            ),
+              eq(accounts.provider, account.provider)
+            )
           )
-          .get() ?? null
+          .get()) ?? null
       );
     },
     deleteSession: (sessionToken) => {
       return (
-        database.delete(sessions).where(eq(sessions.sessionToken, sessionToken)).returning().get() ?? null
+        database
+          .delete(sessions)
+          .where(eq(sessions.sessionToken, sessionToken))
+          .returning()
+          .get() ?? null
       );
     },
     createVerificationToken: (verificationToken) => {
-      return database.insert(verificationTokens).values(verificationToken).returning().get();
+      return database
+        .insert(verificationTokens)
+        .values(verificationToken)
+        .returning()
+        .get();
     },
     useVerificationToken: async (verificationToken) => {
       try {
@@ -98,8 +130,8 @@ export function DrizzleAdapter(database: typeof db): Adapter {
           .where(
             and(
               eq(verificationTokens.identifier, verificationToken.identifier),
-              eq(verificationTokens.token, verificationToken.token),
-            ),
+              eq(verificationTokens.token, verificationToken.token)
+            )
           )
           .returning()
           .get() ?? null) as Promise<VerificationToken | null>;
@@ -116,8 +148,8 @@ export function DrizzleAdapter(database: typeof db): Adapter {
         .where(
           and(
             eq(accounts.providerAccountId, account.providerAccountId),
-            eq(accounts.provider, account.provider),
-          ),
+            eq(accounts.provider, account.provider)
+          )
         )
         .run();
 

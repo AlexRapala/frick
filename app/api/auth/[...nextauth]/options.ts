@@ -1,10 +1,11 @@
 import type { NextAuthOptions, Session } from "next-auth";
 import GithubProvider from "next-auth/providers/github";
 import GoogleProvider from "next-auth/providers/google";
-import { DrizzleAdapter } from "@/drizzle/adapter";
+import { DrizzleAdapter } from "@auth/drizzle-adapter";
 import { db } from "@/lib/turso";
 
 export const options: NextAuthOptions = {
+  // @ts-ignore
   adapter: DrizzleAdapter(db),
   providers: [
     GoogleProvider({
