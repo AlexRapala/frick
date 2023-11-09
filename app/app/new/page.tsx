@@ -2,10 +2,7 @@ import { getServerSession } from "next-auth/next";
 import { options } from "@/app/api/auth/[...nextauth]/options";
 import { db } from "@/lib/turso";
 import { tasks, users } from "@/drizzle/schema";
-import { insertTask } from "@/actions/actions";
-import NewTask from "@/components/NewTask";
-import { ModeToggle } from "@/components/DarkModeToggle";
-import { NavMenu } from "@/components/NavMenu";
+import NewTask from "@/components/new-task";
 
 export default async function Home() {
   const session = await getServerSession(options);

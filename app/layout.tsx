@@ -3,11 +3,14 @@ import { Inter as FontSans } from "next/font/google";
 import "./globals.css";
 import { cn } from "@/lib/utils";
 import { ThemeProvider } from "@/components/theme-provider";
-import { NavMenu } from "@/components/NavMenu";
-import { ModeToggle } from "@/components/DarkModeToggle";
+import { NavMenu } from "@/components/nav-menu";
+import { ModeToggle } from "@/components/mode-toggle";
 import { getServerSession } from "next-auth/next";
 import { options } from "@/app/api/auth/[...nextauth]/options";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+import { Button } from "@/components/ui/button";
+import { signIn } from "next-auth/react";
+import { UnauthedNavMenu } from "@/components/unauth-nav-menu";
 
 export const metadata: Metadata = {
   title: "Create Next App",
@@ -39,18 +42,9 @@ export default async function RootLayout({
           enableSystem
           disableTransitionOnChange
         >
-          <div className="flex items-center justify-between px-4 py-4">
-            <NavMenu />
-            <div className="flex direction-row gap-4">
-              <ModeToggle />
-              <Avatar>
-                <AvatarImage src={session?.user.image || ""} alt="@shadcn" />
-                <AvatarFallback>
-                  {session?.user.name?.[0] || "U"}
-                </AvatarFallback>
-              </Avatar>
-            </div>
-          </div>
+          {session?.user && <NavMenu session={session} />}
+
+          {!session?.user && <UnauthedNavMenu />}
 
           {children}
         </ThemeProvider>
