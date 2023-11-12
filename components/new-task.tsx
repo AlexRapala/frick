@@ -3,8 +3,14 @@
 import { CreateTask } from "@/types/types";
 import { useState } from "react";
 import { useForm, SubmitHandler } from "react-hook-form";
+import { z } from "zod";
+import { zodResolver } from "@hookform/resolvers/zod";
+
+import { FormDataSchema } from "@/types/zod";
 import { Button } from "./ui/button";
 import { Input } from "./ui/input";
+
+type Inputs = z.infer<typeof FormDataSchema>;
 
 export default function NewTask() {
   const [data, setData] = useState<CreateTask>();
@@ -14,12 +20,7 @@ export default function NewTask() {
     handleSubmit,
     register,
     reset,
-  } = useForm<CreateTask>({
-    defaultValues: {
-      title: "",
-      description: "",
-    },
-  });
+  } = useForm<Inputs>({ resolver: zodResolver(FormDataSchema) });
 
   const processForm: SubmitHandler<CreateTask> = async (data) => {
     const resp = await fetch("/api/tasks", {
@@ -28,6 +29,7 @@ export default function NewTask() {
     });
     console.log(resp);
     const asdf = await resp.json();
+    reset();
     setData(asdf);
   };
 
@@ -40,7 +42,7 @@ export default function NewTask() {
         <Input
           placeholder="title"
           className="rounded-lg"
-          {...register("title", { required: "Title is required" })}
+          {...register("title")}
         />
         {errors.title?.message && (
           <p className="text-sm text-red-400">{errors.title.message}</p>
@@ -49,13 +51,7 @@ export default function NewTask() {
         <Input
           placeholder="description"
           className="rounded-lg"
-          {...register("description", {
-            required: "Description is required",
-            minLength: {
-              value: 4,
-              message: "Message must have at least 4 characters",
-            },
-          })}
+          {...register("description")}
         />
         {errors.description?.message && (
           <p className="text-sm text-red-400">{errors.description.message}</p>
