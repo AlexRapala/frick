@@ -9,8 +9,6 @@ const Logo = (props: SVGProps<SVGSVGElement>) => {
       data-name="Layer 1"
       viewBox="0 0 500 500"
       {...props}
-      width="40px"
-      height="auto"
       fill="hsl(var(--accent-foreground)"
     >
       <defs>
