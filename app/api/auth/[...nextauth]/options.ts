@@ -33,6 +33,9 @@ function getAdapter(): Adapter {
 export const options: NextAuthOptions = {
   // @ts-ignore
   adapter: getAdapter(),
+  pages: {
+    signIn: "/signin",
+  },
   providers: [
     GoogleProvider({
       clientId: process.env.GOOGLE_ID as string,

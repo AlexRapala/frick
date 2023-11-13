@@ -1,9 +1,7 @@
-import { useTheme } from "next-themes";
 import * as React from "react";
 import { SVGProps } from "react";
+
 const Logo = (props: SVGProps<SVGSVGElement>) => {
-  const { theme } = useTheme();
-  console.log(theme);
   return (
     <svg
       xmlns="http://www.w3.org/2000/svg"
