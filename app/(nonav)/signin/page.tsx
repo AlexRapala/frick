@@ -16,15 +16,16 @@ export default async function SignIn() {
       </Link>
 
       <>
-        {Object.values(providers).map((provider) => (
-          <div key={provider.name}>
-            <Button
-              onClick={() => signIn(provider.id, { callbackUrl: "/app" })}
-            >
-              Sign in with {provider.name}
-            </Button>
-          </div>
-        ))}
+        <div key={"google"}>
+          <Button onClick={() => signIn("google", { callbackUrl: "/app" })}>
+            Sign in with {"Google"}
+          </Button>
+        </div>
+        <div key={"github"}>
+          <Button onClick={() => signIn("github", { callbackUrl: "/app" })}>
+            Sign in with {"Github"}
+          </Button>
+        </div>
       </>
     </div>
   );
