@@ -30,7 +30,7 @@ export function NavMenu({ session }: { session: Session }) {
     <div className="flex items-center justify-between px-4 py-4">
       <div className="flex direction-row gap-4">
         <Link href="/app">
-          <Logo />
+          <Logo width="40px" height="40px" />
         </Link>
         <NavigationMenu>
           <NavigationMenuList>

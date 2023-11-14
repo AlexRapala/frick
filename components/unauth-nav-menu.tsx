@@ -16,7 +16,7 @@ export function UnauthedNavMenu() {
     <div className="flex items-center justify-between px-4 py-4">
       <div>
         <Link href="/">
-          <Logo />
+          <Logo width="40px" height="40px" />
         </Link>
       </div>
       <div className="flex direction-row gap-4">

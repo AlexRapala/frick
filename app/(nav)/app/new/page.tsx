@@ -1,7 +1,7 @@
 import { getServerSession } from "next-auth/next";
 import { options } from "@/app/api/auth/[...nextauth]/options";
 import { db } from "@/lib/turso";
-import { tasks, users } from "@/drizzle/schema";
+import { tasks } from "@/drizzle/schema";
 import NewTask from "@/components/new-task";
 
 export default async function Home() {

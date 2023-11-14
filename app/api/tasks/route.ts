@@ -1,16 +1,12 @@
 import { tasks } from "@/drizzle/schema";
 import { db } from "@/lib/turso";
 import { getServerSession } from "next-auth/next";
-
-import { CreateTask } from "@/types/types";
 import { NextRequest } from "next/server";
 import { v4 as uuidv4 } from "uuid";
 import { options } from "../auth/[...nextauth]/options";
 import { z } from "zod";
 import { FormDataSchema } from "@/types/zod";
 import { eq } from "drizzle-orm";
-
-type Inputs = z.infer<typeof FormDataSchema>;
 
 export async function POST(request: NextRequest) {
   const session = await getServerSession(options);
