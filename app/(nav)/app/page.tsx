@@ -5,10 +5,12 @@ import { tasks } from "@/drizzle/schema";
 import { db } from "@/lib/turso";
 import { eq } from "drizzle-orm";
 import { getServerSession } from "next-auth";
+import { useEffect } from "react";
+
+export const revalidate = 0;
 
 export default async function App() {
   const session = await getServerSession(options);
-  console.log("here");
   const result = await db
     .select()
     .from(tasks)
