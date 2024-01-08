@@ -1,22 +1,35 @@
-import { integer, sqliteTable, text, primaryKey } from "drizzle-orm/sqlite-core"
-import type { AdapterAccount } from "@auth/core/adapters"
+import {
+  integer,
+  sqliteTable,
+  text,
+  primaryKey,
+} from "drizzle-orm/sqlite-core";
+import type { AdapterAccount } from "@auth/core/adapters";
 import { sql } from "drizzle-orm";
-
 
 export const users = sqliteTable("user", {
   id: text("id").notNull().primaryKey(),
   name: text("name"),
   email: text("email").notNull(),
   emailVerified: integer("emailVerified", { mode: "timestamp_ms" }),
-  image: text("image")
+  image: text("image"),
 });
 
 export const tasks = sqliteTable("task", {
-    id: text("id").notNull().primaryKey(),
-    title: text("title"),
-    description: text("description"),
-    userId: text("userId").references(() => users.id),
-    created: text("timestamp").default(sql`CURRENT_TIMESTAMP`),
+  id: text("id").notNull().primaryKey(),
+  title: text("title"),
+  description: text("description"),
+  userId: text("userId").references(() => users.id),
+  created: text("timestamp").default(sql`CURRENT_TIMESTAMP`),
+});
+
+export const lifts = sqliteTable("lifts", {
+  id: text("id").notNull().primaryKey(),
+  name: text("name"),
+  weight: text("weight"),
+  reps: text("reps"),
+  userId: text("userId").references(() => users.id),
+  created: text("timestamp").default(sql`CURRENT_TIMESTAMP`),
 });
 
 export const accounts = sqliteTable(
@@ -34,10 +47,10 @@ export const accounts = sqliteTable(
     token_type: text("token_type"),
     scope: text("scope"),
     id_token: text("id_token"),
-    session_state: text("session_state")
+    session_state: text("session_state"),
   },
   (account) => ({
-    compoundKey: primaryKey(account.provider, account.providerAccountId)
+    compoundKey: primaryKey(account.provider, account.providerAccountId),
   })
 );
 
@@ -46,7 +59,7 @@ export const sessions = sqliteTable("session", {
   userId: text("userId")
     .notNull()
     .references(() => users.id, { onDelete: "cascade" }),
-  expires: integer("expires", { mode: "timestamp_ms" }).notNull()
+  expires: integer("expires", { mode: "timestamp_ms" }).notNull(),
 });
 
 export const verificationTokens = sqliteTable(
@@ -54,9 +67,9 @@ export const verificationTokens = sqliteTable(
   {
     identifier: text("identifier").notNull(),
     token: text("token").notNull(),
-    expires: integer("expires", { mode: "timestamp_ms" }).notNull()
+    expires: integer("expires", { mode: "timestamp_ms" }).notNull(),
   },
   (vt) => ({
-    compoundKey: primaryKey(vt.identifier, vt.token)
+    compoundKey: primaryKey(vt.identifier, vt.token),
   })
 );
