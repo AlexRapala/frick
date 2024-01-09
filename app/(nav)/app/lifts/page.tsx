@@ -1,22 +1,15 @@
 import { options } from "@/app/api/auth/[...nextauth]/options";
 import { columns, columnsLifts } from "@/components/table/columns";
 import { DataTable } from "@/components/table/data-table";
+import { Button } from "@/components/ui/button";
 import { lifts, tasks } from "@/drizzle/schema";
 import { db } from "@/lib/turso";
-import { desc, eq } from "drizzle-orm";
+import { eq, desc } from "drizzle-orm";
 import { getServerSession } from "next-auth";
-import { useEffect } from "react";
-
-export const revalidate = 0;
+import Link from "next/link";
 
 export default async function App() {
   const session = await getServerSession(options);
-  const result = await db
-    .select()
-    .from(tasks)
-    .where(eq(tasks.userId, session?.user.id || ""))
-    .limit(10)
-    .orderBy(desc(tasks.created));
 
   const liftsq = await db
     .select()
@@ -27,11 +20,13 @@ export default async function App() {
 
   return (
     <section className="py-12 px-12">
-      <h1 className="mb-16 text-2xl font-medium">Lifts</h1>
+      <div className="flex justify-between">
+        <h1 className="mb-16 text-2xl font-medium">Lifts</h1>
+        <Link href="lifts/new">
+          <Button>New Lift</Button>
+        </Link>
+      </div>
       <DataTable data={liftsq} columns={columnsLifts} />
-      <h1 className="mb-16 text-2xl font-medium">Tasks</h1>
-
-      <DataTable data={result} columns={columns} />
     </section>
   );
 }

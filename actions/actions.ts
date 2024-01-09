@@ -5,37 +5,30 @@ import { tasks } from "@/drizzle/schema";
 import { getServerSession } from "next-auth/next";
 import { options } from "@/app/api/auth/[...nextauth]/options";
 import { v4 as uuidv4 } from "uuid";
+import { FormDataSchema } from "@/types/zod";
+import { CreateTask } from "@/types/types";
+import { eq } from "drizzle-orm";
 
-export async function insertTask({
-  title,
-  description,
-}: {
-  title: string;
-  description: string;
-}) {
+export async function insertTask(data: CreateTask) {
   const session = await getServerSession(options);
 
-  const result = await db.insert(tasks).values({
-    id: uuidv4(),
-    title: title,
-    description: description,
-    userId: session?.user.id,
-  });
+  const parsedData = FormDataSchema.safeParse(data);
 
-  console.log(result);
-  return result;
-}
-
-export async function test({
-  title,
-  description,
-}: {
-  title: string;
-  description: string;
-}) {
-  if (!title || !description) {
-    return { error: "wtf" };
+  if (parsedData.success) {
+    const id = uuidv4();
+    const result = await db.insert(tasks).values({
+      id: id,
+      title: parsedData.data.title,
+      description: parsedData.data.description,
+      userId: session?.user.id,
+    });
+    console.log(result);
+    console.log(id);
+    const query = await db.select().from(tasks).where(eq(tasks.id, id)).get();
+    return query;
   }
-  console.log(title, description);
-  return { data: { title, description } };
+
+  if (parsedData.error) {
+    return { error: parsedData.error.format() };
+  }
 }

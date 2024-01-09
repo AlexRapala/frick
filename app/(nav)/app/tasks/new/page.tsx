@@ -8,7 +8,7 @@ export default async function Home() {
   const session = await getServerSession(options);
 
   const results = await db.select().from(tasks);
-  console.log(results);
+  //console.log(results);
 
   return (
     <section className="py-24 px-24">

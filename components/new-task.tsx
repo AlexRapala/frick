@@ -3,22 +3,34 @@
 import { CreateTask } from "@/types/types";
 import { useState, useTransition } from "react";
 import { useForm, SubmitHandler } from "react-hook-form";
-import { z } from "zod";
+import { ZodFormattedError, z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
-
+import { insertTask } from "@/actions/actions";
 import { FormDataSchema } from "@/types/zod";
 import { Button } from "./ui/button";
 import { Input } from "./ui/input";
 import { useRouter } from "next/navigation";
+import { tasks } from "@/drizzle/schema";
+import { InferSelectModel } from "drizzle-orm";
 
 type Inputs = z.infer<typeof FormDataSchema>;
+type Task = InferSelectModel<typeof tasks>;
 
 export default function NewTask() {
   const router = useRouter();
   const [isPending, startTransition] = useTransition();
   const [isFetching, setIsFetching] = useState(false);
 
-  const [data, setData] = useState<CreateTask>();
+  const [data, setData] = useState<
+    | Task
+    | {
+        error: ZodFormattedError<
+          { title: string; description: string },
+          string
+        >;
+      }
+    | undefined
+  >();
 
   const isMutating = isFetching || isPending;
 
@@ -32,19 +44,14 @@ export default function NewTask() {
   const processForm: SubmitHandler<CreateTask> = async (data) => {
     setIsFetching(true);
 
-    const resp = await fetch("/api/tasks", {
-      method: "POST",
-      body: JSON.stringify(data),
-    });
-    console.log(resp);
-    const asdf = await resp.json();
+    const asdf = await insertTask(data);
+    console.log(asdf);
     setIsFetching(false);
     reset();
 
     startTransition(() => {
       router.refresh();
     });
-
     setData(asdf);
   };
 

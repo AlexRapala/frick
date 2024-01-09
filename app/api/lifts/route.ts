@@ -24,7 +24,7 @@ export async function POST(request: NextRequest) {
       reps: parsedData.data.reps,
       userId: session?.user.id,
     });
-
+    
     const query = await db.select().from(lifts).where(eq(lifts.id, id)).get();
     console.log(query);
     return Response.json(query);

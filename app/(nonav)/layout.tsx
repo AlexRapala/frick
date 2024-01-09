@@ -3,14 +3,9 @@ import { Inter as FontSans } from "next/font/google";
 import "@/app/globals.css";
 import { cn } from "@/lib/utils";
 import { ThemeProvider } from "@/components/theme-provider";
-import { NavMenu } from "@/components/nav-menu";
 import { ModeToggle } from "@/components/mode-toggle";
 import { getServerSession } from "next-auth/next";
 import { options } from "@/app/api/auth/[...nextauth]/options";
-import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
-import { Button } from "@/components/ui/button";
-import { signIn } from "next-auth/react";
-import { UnauthedNavMenu } from "@/components/unauth-nav-menu";
 
 export const metadata: Metadata = {
   title: "Frick - Sign In",

@@ -42,9 +42,16 @@ export function NavMenu({ session }: { session: Session }) {
               </Link>
             </NavigationMenuItem>
             <NavigationMenuItem>
-              <Link href="/app/new" legacyBehavior passHref>
+              <Link href="/app/tasks" legacyBehavior passHref>
                 <NavigationMenuLink className={navigationMenuTriggerStyle()}>
-                  New Task
+                  Tasks
+                </NavigationMenuLink>
+              </Link>
+            </NavigationMenuItem>
+            <NavigationMenuItem>
+              <Link href="/app/lifts" legacyBehavior passHref>
+                <NavigationMenuLink className={navigationMenuTriggerStyle()}>
+                  Lifts
                 </NavigationMenuLink>
               </Link>
             </NavigationMenuItem>
