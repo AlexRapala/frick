@@ -15,9 +15,8 @@ export default async function App() {
     .select()
     .from(lifts)
     .where(eq(lifts.userId, session?.user.id || ""))
-    .limit(10)
-    .orderBy(desc(lifts.created));
-
+    .orderBy(desc(lifts.created))
+    .limit(10);
   return (
     <section className="py-12 px-12">
       <div className="flex justify-between">
