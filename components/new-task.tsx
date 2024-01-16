@@ -12,27 +12,15 @@ import { Input } from "./ui/input";
 import { useRouter } from "next/navigation";
 import { tasks } from "@/drizzle/schema";
 import { InferSelectModel } from "drizzle-orm";
+import { revalidateTag } from "next/cache";
 
 type Inputs = z.infer<typeof FormDataSchema>;
 type Task = InferSelectModel<typeof tasks>;
 
 export default function NewTask() {
-  const router = useRouter();
-  const [isPending, startTransition] = useTransition();
   const [isFetching, setIsFetching] = useState(false);
 
-  const [data, setData] = useState<
-    | Task
-    | {
-        error: ZodFormattedError<
-          { title: string; description: string },
-          string
-        >;
-      }
-    | undefined
-  >();
-
-  const isMutating = isFetching || isPending;
+  const [data, setData] = useState<Task | undefined>();
 
   const {
     formState: { errors },
@@ -42,6 +30,10 @@ export default function NewTask() {
   } = useForm<Inputs>({ resolver: zodResolver(FormDataSchema) });
 
   const processForm: SubmitHandler<CreateTask> = async (data) => {
+    if (isFetching) {
+      return;
+    }
+
     setIsFetching(true);
 
     const asdf = await insertTask(data);
@@ -49,9 +41,6 @@ export default function NewTask() {
     setIsFetching(false);
     reset();
 
-    startTransition(() => {
-      router.refresh();
-    });
     setData(asdf);
   };
 
@@ -59,11 +48,11 @@ export default function NewTask() {
     <section className="flex gap-6 items-center">
       <form
         onSubmit={handleSubmit(processForm)}
-        className="flex flex-1 flex-col gap-4 sm:w-1/2"
-        style={{ opacity: !isMutating ? 1 : 0.7 }}
+        className="flex flex-1 flex-row gap-4 sm:w-1/2"
+        style={{ opacity: !isFetching ? 1 : 0.7 }}
       >
         <Input
-          placeholder="title"
+          placeholder="Title"
           className="rounded-lg"
           {...register("title")}
         />
@@ -72,18 +61,15 @@ export default function NewTask() {
         )}
 
         <Input
-          placeholder="description"
+          placeholder="Description"
           className="rounded-lg"
           {...register("description")}
         />
         {errors.description?.message && (
           <p className="text-sm text-red-400">{errors.description.message}</p>
         )}
-        <Button>Submit</Button>
+        <Button>Create</Button>
       </form>
-      <div className="flex-1 rounded-lg bg-cyan-600 p-8 text-white">
-        <pre>{JSON.stringify(data, null, 2)}</pre>
-      </div>
     </section>
   );
 }
