@@ -9,9 +9,15 @@ import { db } from "@/lib/turso";
 import { eq, desc } from "drizzle-orm";
 import { getServerSession } from "next-auth";
 import Link from "next/link";
+import { Suspense } from "react";
 
-export default async function App() {
+async function Lifts() {
   const liftsq = await getLifts();
+
+  return <DataTable data={liftsq} columns={columnsLifts} />;
+}
+
+export default async function Page() {
   return (
     <section className="py-8 px-8 flex flex-col gap-8">
       <div className="flex justify-between">
@@ -19,7 +25,9 @@ export default async function App() {
       </div>
       <div className="flex flex-col gap-2">
         <NewLift />
-        <DataTable data={liftsq} columns={columnsLifts} />
+        <Suspense fallback={null}>
+          <Lifts />
+        </Suspense>
       </div>
     </section>
   );

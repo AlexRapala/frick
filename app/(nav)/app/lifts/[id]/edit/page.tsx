@@ -5,7 +5,7 @@ import { tasks } from "@/drizzle/schema";
 import NewTask from "@/components/new-task";
 import NewLift from "@/components/new-lift";
 
-export default async function Home({ params }: { params: { slug: string } }) {
+export default async function Page({ params }: { params: { slug: string } }) {
   const session = await getServerSession(options);
   return (
     <section className="py-24 px-24">

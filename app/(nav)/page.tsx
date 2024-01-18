@@ -4,7 +4,7 @@ import { eq } from "drizzle-orm";
 import { options } from "../api/auth/[...nextauth]/options";
 import { getServerSession } from "next-auth";
 
-export default async function Home() {
+export default async function Page() {
   return (
     <section className="py-24 px-24">
       <div>This is the home screen</div>

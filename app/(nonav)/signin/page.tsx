@@ -5,7 +5,7 @@ import Link from "next/link";
 import { signIn } from "next-auth/react";
 import { Button } from "@/components/ui/button";
 
-export default async function SignIn() {
+export default async function Page() {
   return (
     <div className="flex justify-center items-center flex-col gap-8 py-24">
       <Link href="/">

@@ -5,7 +5,7 @@ import { tasks } from "@/drizzle/schema";
 import NewTask from "@/components/new-task";
 import NewLift from "@/components/new-lift";
 
-export default async function Home() {
+export default async function Page() {
   return (
     <section className="py-24 px-24">
       <div className="container">

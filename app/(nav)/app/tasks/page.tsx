@@ -10,7 +10,7 @@ import { eq } from "drizzle-orm";
 import { getServerSession } from "next-auth";
 import Link from "next/link";
 
-export default async function App() {
+export default async function Page() {
   const session = await getServerSession(options);
 
   const taskq = await getTasks();

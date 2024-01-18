@@ -6,7 +6,7 @@ import { db } from "@/lib/turso";
 import { eq } from "drizzle-orm";
 import { getServerSession } from "next-auth";
 
-export default async function Home({ params }: { params: { id: string } }) {
+export default async function Page({ params }: { params: { id: string } }) {
   const session = await getServerSession(options);
   console.log(params.id);
 
@@ -19,7 +19,6 @@ export default async function Home({ params }: { params: { id: string } }) {
   return (
     <section className="py-12 px-12">
       <h1 className="mb-16 text-2xl font-medium">Lifts</h1>
-      <DataTable data={liftsq} columns={columnsLifts} />
     </section>
   );
 }
