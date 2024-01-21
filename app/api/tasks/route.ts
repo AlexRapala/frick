@@ -1,19 +1,18 @@
 import { tasks } from "@/drizzle/schema";
 import { db } from "@/lib/turso";
+import { TaskDataSchema } from "@/types/zod";
+import { eq } from "drizzle-orm";
 import { getServerSession } from "next-auth/next";
 import { NextRequest } from "next/server";
 import { v4 as uuidv4 } from "uuid";
 import { options } from "../auth/[...nextauth]/options";
-import { z } from "zod";
-import { FormDataSchema } from "@/types/zod";
-import { eq } from "drizzle-orm";
 
 export async function POST(request: NextRequest) {
   const session = await getServerSession(options);
 
   const data = await request.json();
 
-  const parsedData = FormDataSchema.safeParse(data);
+  const parsedData = TaskDataSchema.safeParse(data);
 
   if (parsedData.success) {
     const id = uuidv4();
