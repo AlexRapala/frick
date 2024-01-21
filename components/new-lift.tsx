@@ -1,21 +1,14 @@
 "use client";
 
-import { CreateLift } from "@/types/types";
-import { useState, useTransition } from "react";
-import { useForm, SubmitHandler } from "react-hook-form";
-import { z } from "zod";
+import { insertLift } from "@/actions/actions";
+import { LiftDataSchema, LiftInputs } from "@/types/zod";
 import { zodResolver } from "@hookform/resolvers/zod";
-
-import { FormDataSchema, LiftDataSchema } from "@/types/zod";
+import { useState } from "react";
+import { SubmitHandler, useForm } from "react-hook-form";
 import { Button } from "./ui/button";
 import { Input } from "./ui/input";
-import { useRouter } from "next/navigation";
-import { insertLift } from "@/actions/actions";
-
-type Inputs = z.infer<typeof LiftDataSchema>;
 
 export default function NewTask() {
-  const router = useRouter();
   const [isFetching, setIsFetching] = useState(false);
 
   const {
@@ -23,9 +16,9 @@ export default function NewTask() {
     handleSubmit,
     register,
     reset,
-  } = useForm<Inputs>({ resolver: zodResolver(LiftDataSchema) });
+  } = useForm<LiftInputs>({ resolver: zodResolver(LiftDataSchema) });
 
-  const processForm: SubmitHandler<CreateLift> = async (data) => {
+  const processForm: SubmitHandler<LiftInputs> = async (data) => {
     if (isFetching) {
       return;
     }

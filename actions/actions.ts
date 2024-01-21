@@ -1,14 +1,18 @@
 "use server";
 
-import { db } from "@/lib/turso";
-import { lifts, tasks } from "@/drizzle/schema";
-import { getServerSession } from "next-auth/next";
 import { options } from "@/app/api/auth/[...nextauth]/options";
-import { v4 as uuidv4 } from "uuid";
-import { FormDataSchema, LiftDataSchema } from "@/types/zod";
-import { CreateLift, CreateTask } from "@/types/types";
+import { lifts, tasks } from "@/drizzle/schema";
+import { db } from "@/lib/turso";
+import {
+  LiftDataSchema,
+  LiftInputs,
+  TaskDataSchema,
+  TaskInputs,
+} from "@/types/zod";
 import { desc, eq } from "drizzle-orm";
+import { getServerSession } from "next-auth/next";
 import { revalidateTag, unstable_cache } from "next/cache";
+import { v4 as uuidv4 } from "uuid";
 
 export const getTasks = unstable_cache(
   async () => {
@@ -21,13 +25,11 @@ export const getTasks = unstable_cache(
 );
 
 export const getLifts = unstable_cache(
-  async () => {
-    const session = await getServerSession(options);
-
+  async (id) => {
     return await db
       .select()
       .from(lifts)
-      .where(eq(lifts.userId, session?.user.id || ""))
+      .where(eq(lifts.userId, id))
       .orderBy(desc(lifts.created))
       .limit(10);
   },
@@ -37,10 +39,10 @@ export const getLifts = unstable_cache(
   }
 );
 
-export async function insertTask(data: CreateTask) {
+export async function insertTask(data: TaskInputs) {
   const session = await getServerSession(options);
 
-  const parsedData = FormDataSchema.safeParse(data);
+  const parsedData = TaskDataSchema.safeParse(data);
 
   if (parsedData.success) {
     const id = uuidv4();
@@ -60,7 +62,7 @@ export async function insertTask(data: CreateTask) {
   }
 }
 
-export async function insertLift(data: CreateLift) {
+export async function insertLift(data: LiftInputs) {
   const session = await getServerSession(options);
 
   const parsedData = LiftDataSchema.safeParse(data);

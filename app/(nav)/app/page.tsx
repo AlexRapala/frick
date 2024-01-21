@@ -15,7 +15,7 @@ async function Dashboard() {
     .where(eq(tasks.userId, session?.user.id || ""))
     .limit(10)
     .orderBy(desc(tasks.created));
-
+  console.log(session?.user.id);
   const liftsq = await db
     .select()
     .from(lifts)

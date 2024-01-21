@@ -1,16 +1,9 @@
 "use client";
 
-import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu";
+import Link from "next/link";
+import Logo from "./logo";
 import { ModeToggle } from "./mode-toggle";
 import { Button } from "./ui/button";
-import { signIn } from "next-auth/react";
-import Logo from "./logo";
-import Link from "next/link";
 export function UnauthedNavMenu() {
   return (
     <div className="flex items-center justify-between px-4 py-4">

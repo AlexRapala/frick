@@ -1,9 +1,5 @@
 import { ColumnDef } from "@tanstack/react-table";
-import { CreateTask } from "@/types/types";
-import { type InferSelectModel } from "drizzle-orm";
-import { lifts } from "@/drizzle/schema";
-
-type Lift = InferSelectModel<typeof lifts>;
+import { Lift, Task } from "@/types/types";
 
 export const columnsLifts: ColumnDef<Lift>[] = [
   {
@@ -23,14 +19,6 @@ export const columnsLifts: ColumnDef<Lift>[] = [
     header: "reps",
   },
 ];
-
-type Task = {
-  id: string;
-  title: string | null;
-  description: string | null;
-  userId: string | null;
-  created: string | null;
-};
 
 export const columns: ColumnDef<Task>[] = [
   {

@@ -1,14 +1,9 @@
 import { getTasks } from "@/actions/actions";
 import { options } from "@/app/api/auth/[...nextauth]/options";
 import NewTask from "@/components/new-task";
-import { columns, columnsLifts } from "@/components/table/columns";
+import { columns } from "@/components/table/columns";
 import { DataTable } from "@/components/table/data-table";
-import { Button } from "@/components/ui/button";
-import { tasks } from "@/drizzle/schema";
-import { db } from "@/lib/turso";
-import { eq } from "drizzle-orm";
 import { getServerSession } from "next-auth";
-import Link from "next/link";
 
 export default async function Page() {
   const session = await getServerSession(options);

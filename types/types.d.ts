@@ -1,10 +1,5 @@
-export type CreateTask = {
-  title: string;
-  description: string;
-};
+import { lifts, tasks } from "@/drizzle/schema";
+import { InferSelectModel } from "drizzle-orm";
 
-export type CreateLift = {
-  name: string;
-  weight: string;
-  reps: string;
-};
+type Task = InferSelectModel<typeof tasks>;
+type Lift = InferSelectModel<typeof lifts>;

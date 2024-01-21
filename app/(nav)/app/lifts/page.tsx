@@ -1,18 +1,15 @@
 import { getLifts } from "@/actions/actions";
 import { options } from "@/app/api/auth/[...nextauth]/options";
 import NewLift from "@/components/new-lift";
-import { columns, columnsLifts } from "@/components/table/columns";
+import { columnsLifts } from "@/components/table/columns";
 import { DataTable } from "@/components/table/data-table";
-import { Button } from "@/components/ui/button";
-import { lifts, tasks } from "@/drizzle/schema";
-import { db } from "@/lib/turso";
-import { eq, desc } from "drizzle-orm";
 import { getServerSession } from "next-auth";
-import Link from "next/link";
 import { Suspense } from "react";
 
 async function Lifts() {
-  const liftsq = await getLifts();
+  const session = await getServerSession(options);
+
+  const liftsq = await getLifts(session?.user.id || "");
 
   return <DataTable data={liftsq} columns={columnsLifts} />;
 }
