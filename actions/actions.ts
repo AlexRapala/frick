@@ -15,8 +15,13 @@ import { revalidateTag, unstable_cache } from "next/cache";
 import { v4 as uuidv4 } from "uuid";
 
 export const getTasks = unstable_cache(
-  async () => {
-    return db.select().from(tasks).orderBy(desc(tasks.created)).limit(10);
+  async (id) => {
+    return db
+      .select()
+      .from(tasks)
+      .where(eq(tasks.userId, id))
+      .orderBy(desc(tasks.created))
+      .limit(10);
   },
   ["tasks"],
   {

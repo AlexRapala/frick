@@ -8,7 +8,7 @@ import { getServerSession } from "next-auth";
 export default async function Page() {
   const session = await getServerSession(options);
 
-  const taskq = await getTasks();
+  const taskq = await getTasks(session?.user.id || "");
 
   return (
     <section className="py-8 px-8 flex flex-col gap-8">

@@ -1,3 +1,4 @@
+import { getLifts, getTasks } from "@/actions/actions";
 import { options } from "@/app/api/auth/[...nextauth]/options";
 import { columns, columnsLifts } from "@/components/table/columns";
 import { DataTable } from "@/components/table/data-table";
@@ -9,19 +10,8 @@ import { Suspense } from "react";
 
 async function Dashboard() {
   const session = await getServerSession(options);
-  const result = await db
-    .select()
-    .from(tasks)
-    .where(eq(tasks.userId, session?.user.id || ""))
-    .limit(10)
-    .orderBy(desc(tasks.created));
-  console.log(session?.user.id);
-  const liftsq = await db
-    .select()
-    .from(lifts)
-    .where(eq(lifts.userId, session?.user.id || ""))
-    .limit(10)
-    .orderBy(desc(lifts.created));
+  const result = await getTasks(session?.user.id || "");
+  const liftsq = await getLifts(session?.user.id || "");
   return (
     <>
       <h1 className="mb-16 text-2xl font-medium">Lifts</h1>
