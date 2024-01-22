@@ -9,7 +9,7 @@ import { Suspense } from "react";
 async function Lifts() {
   const session = await getServerSession(options);
 
-  const liftsq = await getLifts(session?.user.id || "");
+  const liftsq = await getLifts(session?.user.id || "")();
 
   return <DataTable data={liftsq} columns={columnsLifts} />;
 }

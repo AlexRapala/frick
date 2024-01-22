@@ -10,8 +10,8 @@ import { Suspense } from "react";
 
 async function Dashboard() {
   const session = await getServerSession(options);
-  const result = await getTasks(session?.user.id || "");
-  const liftsq = await getLifts(session?.user.id || "");
+  const result = await getTasks(session?.user.id || "")();
+  const liftsq = await getLifts(session?.user.id || "")();
   return (
     <>
       <h1 className="mb-16 text-2xl font-medium">Lifts</h1>

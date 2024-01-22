@@ -1,33 +1,36 @@
 "use client";
 
-import { insertLift } from "@/actions/actions";
+import { editLift, insertLift } from "@/actions/actions";
 import { LiftDataSchema, LiftInputs } from "@/types/zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useState } from "react";
 import { SubmitHandler, useForm } from "react-hook-form";
 import { Button } from "./ui/button";
 import { Input } from "./ui/input";
+import { Lift } from "@/types/types";
+import { Weight } from "lucide-react";
 
-export default function NewLift() {
+export default function EditLift({ lift }: { lift: Lift }) {
   const [isFetching, setIsFetching] = useState(false);
-
   const {
     formState: { errors },
     handleSubmit,
     register,
     reset,
-  } = useForm<LiftInputs>({ resolver: zodResolver(LiftDataSchema) });
+  } = useForm<Lift>({
+    defaultValues: lift,
+    resolver: zodResolver(LiftDataSchema),
+  });
 
-  const processForm: SubmitHandler<LiftInputs> = async (data) => {
+  const processForm: SubmitHandler<Lift> = async (data) => {
     if (isFetching) {
       return;
     }
     setIsFetching(true);
-    const asdf = await insertLift(data);
+    const asdf = await editLift(data);
     console.log(asdf);
 
     setIsFetching(false);
-    reset();
   };
 
   return (
