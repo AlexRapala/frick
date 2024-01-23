@@ -110,30 +110,16 @@ export async function insertLift(data: LiftInputs) {
 export async function editLift(data: Lift) {
   const session = await getServerSession(options);
 
-  if (session?.user.id !== data.userId) {
-    return;
-  }
-
   const parsedData = LiftDataSchema.safeParse(data);
-
   if (parsedData.success) {
     const result = await db
       .update(lifts)
-      .set({
-        name: parsedData.data.name,
-        weight: parsedData.data.weight,
-        reps: parsedData.data.reps,
-      })
-      .where(and(eq(lifts.userId, data.userId), eq(lifts.id, data.id)));
-    console.log(result);
-    const query = await db
-      .select()
-      .from(lifts)
-      .where(eq(lifts.id, data.id))
-      .get();
+      .set(parsedData.data)
+      .where(eq(lifts.id, data.id));
 
     revalidateTag(`lifts-${session?.user.id}`);
-
-    return query;
+    console.log(result);
+    return "success";
   }
+  console.log(parsedData.error, "asdfasdf");
 }

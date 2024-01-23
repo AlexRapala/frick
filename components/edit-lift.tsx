@@ -1,14 +1,13 @@
 "use client";
 
-import { editLift, insertLift } from "@/actions/actions";
-import { LiftDataSchema, LiftInputs } from "@/types/zod";
+import { editLift } from "@/actions/actions";
+import { LiftDataSchema } from "@/types/zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useState } from "react";
 import { SubmitHandler, useForm } from "react-hook-form";
 import { Button } from "./ui/button";
 import { Input } from "./ui/input";
 import { Lift } from "@/types/types";
-import { Weight } from "lucide-react";
 
 export default function EditLift({ lift }: { lift: Lift }) {
   const [isFetching, setIsFetching] = useState(false);
@@ -27,8 +26,9 @@ export default function EditLift({ lift }: { lift: Lift }) {
       return;
     }
     setIsFetching(true);
-    const asdf = await editLift(data);
-    console.log(asdf);
+    console.log(data);
+    const asdf = await editLift({ ...data, id: lift.id });
+    console.log(asdf, "resp");
 
     setIsFetching(false);
   };
